@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Node(data,left,right){
+        this.data =data;
+        this.left = left;
+        this.right = right;
+    }
+    Node.prototype.show=function (){
+        return this.data
+    }
+    function BST(){//二叉搜索树
+        this.root = null;
+        this.pre=[];
+        this.mid=[];
+        this.after=[];
+    }
+    BST.prototype.insert=function (data){
+        var node = new Node(data,null,null);
+        if(this.root == null){
+            this.root = node;
+        }else{
+            var currentNode = this.root;//每次给定一棵已创建树
+            var parentNode;
+            while(true){
+                /* 完成前3个数的插入后 其树如下所示
+                *           Node(10，Node(3),Node(18))
+                *  Node(3,null,null)             Node(18,null,null)
+                *
+                * 传入的数组第四个数2,新生成Node实例对象Node(2,null,null)
+                * 首先拿根Node(10).data和Node(2).data比较，2比10小进入if
+                * 将Node(10)的左子节点Node(3)赋值给当前结点，其值为3不为null，重新进入while循环
+                * 赋值完后此时currentNode为Node(3),而Node(3).data比Node(2).data大，所以进入if
+                * 赋值完后此时currentNode的左节点为null,因此进入if执行完毕跳出循环
+                * */
+                parentNode=currentNode//作为当前未赋值的结点的父节点
+                if(data<currentNode.data){
+                    currentNode = currentNode.left//从根出发，判断其左节点是否为有值
+                    if(currentNode==null){
+                        parentNode.left = node;
+                        break;
+                    }
+                }else {
+                    currentNode = currentNode.right
+                    if(currentNode==null){
+                        parentNode.right = node;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    BST.prototype.preOrder = function (node){
+        if(node){
+            this.pre.push(node.data)
+            this.preOrder(node.left)
+            this.preOrder(node.right)
+        }
+        console.log(this.pre)
+    }
+    BST.prototype.midOrder = function (node){
+        if(node){
+            this.midOrder(node.left)
+            this.mid.push(node.data)
+            this.midOrder(node.right)
+        }
+        console.log(this.mid)
+    }
+    BST.prototype.posOrder = function (node){
+        if(node){
+            this.posOrder(node.left)
+            this.posOrder(node.right)
+            this.after.push(node.data)
+        }
+        console.log(this.after)
+    }
+    var bst = new BST()
+    let num = [10,3,18,2,4,13,21,9,8,9];
+    for (var i in num){
+        bst.insert(num[i])
+    }
+    bst.preOrder(bst.root);
+    bst.midOrder(bst.root);
+    bst.posOrder(bst.root);
+</script>
+</body>
+</html>
